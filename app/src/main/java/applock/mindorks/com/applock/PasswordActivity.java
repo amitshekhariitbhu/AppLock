@@ -1,40 +1,39 @@
 package applock.mindorks.com.applock;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
+
+import com.takwolf.android.lock9.Lock9View;
 
 /**
- * Created by amitshekhar on 27/04/15.
+ * Created by amitshekhar on 28/04/15.
  */
-public class SettingsActivity extends ActionBarActivity {
+public class PasswordActivity extends ActionBarActivity {
 
-
-    Button changePassword;
+    Lock9View lock9View;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_password);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
+        actionBar.setTitle("Password Change");
 
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        changePassword = (Button) findViewById(R.id.changePassword);
-
-        changePassword.setOnClickListener(new View.OnClickListener() {
+        lock9View = (Lock9View) findViewById(R.id.lock_9_view);
+        lock9View.setCallBack(new Lock9View.CallBack() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(SettingsActivity.this, PasswordActivity.class);
-                startActivity(i);
+            public void onFinish(String password) {
+                Toast.makeText(PasswordActivity.this, password, Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
 }
+

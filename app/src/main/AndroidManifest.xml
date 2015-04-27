@@ -26,6 +26,16 @@
                 android:value="applock.mindorks.com.applock.MainActivity" />
         </activity>
 
+        <activity
+            android:name="applock.mindorks.com.applock.PasswordActivity"
+            android:label="@string/action_settings"
+            android:parentActivityName="applock.mindorks.com.applock.SettingsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="applock.mindorks.com.applock.SettingsActivity" />
+        </activity>
+
     </application>
 
 </manifest>
