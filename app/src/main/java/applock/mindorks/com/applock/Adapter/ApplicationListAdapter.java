@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
         // each data item is just a string in this case
         public TextView applicationName;
         public CardView cardView;
+        public ImageView icon;
 
         public ViewHolder(View v) {
             super(v);
@@ -37,6 +39,7 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
 //            });
             applicationName = (TextView) v.findViewById(R.id.applicationName);
             cardView = (CardView) v.findViewById(R.id.card_view);
+            icon = (ImageView) v.findViewById(R.id.icon);
         }
     }
 
@@ -74,6 +77,7 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
         // - replace the contents of the view with that element
         final AppInfo appInfo = installedApps.get(position);
         holder.applicationName.setText(appInfo.getName());
+        holder.icon.setBackgroundDrawable(appInfo.getIcon());
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
