@@ -13,8 +13,7 @@
 
         <service
             android:name="applock.mindorks.com.applock.services.AppCheckServices"
-            android:exported="false"
-            android:process=":appLock" />
+            android:exported="false" />
 
         <receiver
             android:name="applock.mindorks.com.applock.services.BootComplete"
@@ -51,7 +50,7 @@
 
         <activity
             android:name="applock.mindorks.com.applock.PasswordActivity"
-            android:label="@string/action_settings"
+            android:label="@string/action_password"
             android:parentActivityName="applock.mindorks.com.applock.SettingsActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

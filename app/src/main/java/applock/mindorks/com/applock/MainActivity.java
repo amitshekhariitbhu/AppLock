@@ -52,6 +52,16 @@ public class MainActivity extends ActionBarActivity {
         startService(new Intent(MainActivity.this, AppCheckServices.class));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

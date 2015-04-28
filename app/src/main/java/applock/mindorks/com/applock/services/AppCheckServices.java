@@ -74,6 +74,11 @@ public class AppCheckServices extends Service {
         public void run() {
             Log.d(TAG, "football keep going");
             pakageName = sharedPreference.getLocked(context);
+            Log.d(TAG, "football keep going size " + pakageName.size());
+            for (int i = 0; i < pakageName.size(); i++) {
+                Log.d(TAG, "football keep going pakageName " + pakageName.get(i));
+            }
+
             if (isConcernedAppIsInForeground()) {
                 Log.d(TAG, "football true");
                 if (imageView != null) {
