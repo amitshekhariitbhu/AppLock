@@ -5,4 +5,5 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorPrimary">@color/primary</item>
     </style>
+
 </resources>

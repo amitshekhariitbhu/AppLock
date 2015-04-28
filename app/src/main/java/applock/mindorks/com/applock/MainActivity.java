@@ -32,8 +32,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
+//        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
         actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>App Lock</font>"));
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -48,7 +48,6 @@ public class MainActivity extends ActionBarActivity {
 
         mAdapter = new ApplicationListAdapter(getListOfInstalledApp(getApplicationContext()), getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
-
 
         startService(new Intent(MainActivity.this, AppCheckServices.class));
     }

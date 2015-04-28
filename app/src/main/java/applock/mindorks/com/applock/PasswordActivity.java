@@ -19,8 +19,8 @@ public class PasswordActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
+//        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
         actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Password change</font>"));
 
         // Enabling Up / Back navigation

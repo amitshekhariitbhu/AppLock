@@ -77,7 +77,7 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final AppInfo appInfo = installedApps.get(position);
@@ -85,6 +85,7 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
         holder.icon.setBackgroundDrawable(appInfo.getIcon());
 
         holder.switchView.setOnCheckedChangeListener(null);
+        holder.cardView.setOnClickListener(null);
         if (checkLockedItem(appInfo.getPackageName())) {
             holder.switchView.setChecked(true);
         } else {
@@ -98,6 +99,13 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
                 } else {
                     sharedPreference.removeLocked(context, appInfo.getPackageName());
                 }
+            }
+        });
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.switchView.performClick();
             }
         });
     }
