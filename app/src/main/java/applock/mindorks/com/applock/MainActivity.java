@@ -17,6 +17,7 @@ import java.util.List;
 
 import applock.mindorks.com.applock.Adapter.ApplicationListAdapter;
 import applock.mindorks.com.applock.Data.AppInfo;
+import applock.mindorks.com.applock.services.AppCheckServices;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -48,6 +49,8 @@ public class MainActivity extends ActionBarActivity {
         mAdapter = new ApplicationListAdapter(getListOfInstalledApp(getApplicationContext()));
         mRecyclerView.setAdapter(mAdapter);
 
+
+        startService(new Intent(MainActivity.this, AppCheckServices.class));
     }
 
 
