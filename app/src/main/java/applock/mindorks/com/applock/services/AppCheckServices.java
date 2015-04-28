@@ -19,12 +19,12 @@ import android.widget.Toast;
 
 import com.takwolf.android.lock9.Lock9View;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import applock.mindorks.com.applock.R;
+import applock.mindorks.com.applock.Utils.SharedPreference;
 
 /**
  * Created by amitshekhar on 28/04/15.
@@ -39,15 +39,15 @@ public class AppCheckServices extends Service {
     private Dialog dialog;
     public static String currentApp = "";
     public static String previousApp = "";
-    List<String> pakageName = Arrays.asList("com.whatsapp", "com.facebook.orca",
-            "com.google.android.talk", "com.tencent.mm", "com.viber.voip",
-            "jp.naver.line.android", "com.bsb.hike");
+    SharedPreference sharedPreference;
+    List<String> pakageName;
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-
+        sharedPreference = new SharedPreference();
+        pakageName = sharedPreference.getLocked(context);
         timer = new Timer("AppCheckServices");
         timer.schedule(updateTask, 1000L, 1000L);
 
@@ -72,6 +72,7 @@ public class AppCheckServices extends Service {
     private TimerTask updateTask = new TimerTask() {
         @Override
         public void run() {
+            pakageName = sharedPreference.getLocked(context);
             if (isConcernedAppIsInForeground()) {
                 if (imageView != null) {
                     imageView.post(new Runnable() {

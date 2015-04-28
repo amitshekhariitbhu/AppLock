@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        mAdapter = new ApplicationListAdapter(getListOfInstalledApp(getApplicationContext()));
+        mAdapter = new ApplicationListAdapter(getListOfInstalledApp(getApplicationContext()), getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -103,9 +103,9 @@ public class MainActivity extends ActionBarActivity {
                     app.setIcon(p.applicationInfo.loadIcon(packageManager));
 
                     //check if the application is not an application system
-                    Intent launchIntent = app.getLaunchIntent(context);
-                    if (launchIntent != null && (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
-                        installedApps.add(app);
+//                    Intent launchIntent = app.getLaunchIntent(context);
+//                    if (launchIntent != null && (appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
+                    installedApps.add(app);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
