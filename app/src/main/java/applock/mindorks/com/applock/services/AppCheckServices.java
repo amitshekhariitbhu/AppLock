@@ -1,6 +1,7 @@
 package applock.mindorks.com.applock.services;
 
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,15 +10,21 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.takwolf.android.lock9.Lock9View;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import applock.mindorks.com.applock.R;
 
 /**
  * Created by amitshekhar on 28/04/15.
@@ -29,6 +36,7 @@ public class AppCheckServices extends Service {
     private Timer timer;
     ImageView imageView;
     private WindowManager windowManager;
+    private Dialog dialog;
     public static String currentApp = "";
     public static String previousApp = "";
     List<String> pakageName = Arrays.asList("com.whatsapp", "com.facebook.orca",
@@ -68,7 +76,10 @@ public class AppCheckServices extends Service {
                 if (imageView != null) {
                     imageView.post(new Runnable() {
                         public void run() {
-                            showUnlockDialog();
+                            if (!currentApp.matches(previousApp)) {
+                                showUnlockDialog();
+                                previousApp = currentApp;
+                            }
                         }
                     });
                 }
@@ -86,10 +97,50 @@ public class AppCheckServices extends Service {
 
     void showUnlockDialog() {
         Toast.makeText(context, "showUnlockDialog", Toast.LENGTH_SHORT).show();
+        showDialog();
     }
 
     void hideUnlockDialog() {
-        Toast.makeText(context, "hideUnlockDialog", Toast.LENGTH_SHORT).show();
+        previousApp = "";
+        try {
+            if (dialog != null) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void showDialog() {
+        if (context == null)
+            context = getApplicationContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptsView = layoutInflater.inflate(R.layout.popup_unlock, null);
+        Lock9View lock9View = (Lock9View) promptsView.findViewById(R.id.lock_9_view);
+
+        lock9View.setCallBack(new Lock9View.CallBack() {
+            @Override
+            public void onFinish(String password) {
+                if (password.matches("123")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+        dialog.setContentView(promptsView);
+
+
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
     }
 
     @Override
@@ -138,5 +189,18 @@ public class AppCheckServices extends Service {
         super.onDestroy();
         timer.cancel();
         timer = null;
+        if (imageView != null) {
+            windowManager.removeView(imageView);
+        }
+        /**** added to fix the bug of view not attached to window manager ****/
+        try {
+            if (dialog != null) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
