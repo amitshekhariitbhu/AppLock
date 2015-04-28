@@ -2,6 +2,7 @@ package applock.mindorks.com.applock;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.widget.Toast;
 
 import com.takwolf.android.lock9.Lock9View;
@@ -20,7 +21,7 @@ public class PasswordActivity extends ActionBarActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
-        actionBar.setTitle("Password Change");
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Password change</font>"));
 
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);

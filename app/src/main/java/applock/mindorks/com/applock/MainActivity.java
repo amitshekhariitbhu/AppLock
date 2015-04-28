@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,14 +28,13 @@ public class MainActivity extends ActionBarActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
-
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>App Lock</font>"));
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes

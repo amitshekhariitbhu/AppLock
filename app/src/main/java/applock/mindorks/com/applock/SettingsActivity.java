@@ -3,6 +3,7 @@ package applock.mindorks.com.applock;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,7 +22,7 @@ public class SettingsActivity extends ActionBarActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
-
+        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>Settings</font>"));
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
 
