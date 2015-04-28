@@ -39,12 +39,6 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
 
         public ViewHolder(View v) {
             super(v);
-//            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // item clicked
-//                }
-//            });
             applicationName = (TextView) v.findViewById(R.id.applicationName);
             cardView = (CardView) v.findViewById(R.id.card_view);
             icon = (ImageView) v.findViewById(R.id.icon);
@@ -90,16 +84,19 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
         holder.applicationName.setText(appInfo.getName());
         holder.icon.setBackgroundDrawable(appInfo.getIcon());
 
-        if (checkLockedItem(installedApps.get(position).getPackageName())) {
+        holder.switchView.setOnCheckedChangeListener(null);
+        if (checkLockedItem(appInfo.getPackageName())) {
             holder.switchView.setChecked(true);
+        } else {
+            holder.switchView.setChecked(false);
         }
 
         holder.switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    sharedPreference.addLocked(context, installedApps.get(position).getPackageName());
+                    sharedPreference.addLocked(context, appInfo.getPackageName());
                 } else {
-                    sharedPreference.removeLocked(context, installedApps.get(position).getPackageName());
+                    sharedPreference.removeLocked(context, appInfo.getPackageName());
                 }
             }
         });

@@ -9,13 +9,13 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.takwolf.android.lock9.Lock9View;
 
@@ -72,8 +72,10 @@ public class AppCheckServices extends Service {
     private TimerTask updateTask = new TimerTask() {
         @Override
         public void run() {
+            Log.d(TAG, "football keep going");
             pakageName = sharedPreference.getLocked(context);
             if (isConcernedAppIsInForeground()) {
+                Log.d(TAG, "football true");
                 if (imageView != null) {
                     imageView.post(new Runnable() {
                         public void run() {
@@ -97,7 +99,6 @@ public class AppCheckServices extends Service {
     };
 
     void showUnlockDialog() {
-        Toast.makeText(context, "showUnlockDialog", Toast.LENGTH_SHORT).show();
         showDialog();
     }
 
@@ -161,12 +162,15 @@ public class AppCheckServices extends Service {
     }
 
     public boolean isConcernedAppIsInForeground() {
+        if (pakageName == null) {
+            Log.d(TAG, "football pakage is null");
+        }
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> task = manager.getRunningTasks(5);
         if (Build.VERSION.SDK_INT <= 20) {
             if (task.size() > 0) {
                 ComponentName componentInfo = task.get(0).topActivity;
-                for (int i = 0; i < pakageName.size(); i++) {
+                for (int i = 0; pakageName != null && i < pakageName.size(); i++) {
                     if (componentInfo.getPackageName().equals(pakageName.get(i))) {
                         currentApp = pakageName.get(i);
                         return true;
@@ -175,7 +179,7 @@ public class AppCheckServices extends Service {
             }
         } else {
             String mpackageName = manager.getRunningAppProcesses().get(0).processName;
-            for (int i = 0; i < pakageName.size(); i++) {
+            for (int i = 0; pakageName != null && i < pakageName.size(); i++) {
                 if (mpackageName.equals(pakageName.get(i))) {
                     currentApp = pakageName.get(i);
                     return true;
