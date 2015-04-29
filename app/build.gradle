@@ -26,4 +26,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.takwolf.android:lock9view:0.0.2'
     compile 'com.google.code.gson:gson:2.2.4'
+    compile('com.mikepenz.materialdrawer:library:2.9.1@aar') {
+        transitive = true
+    }
 }

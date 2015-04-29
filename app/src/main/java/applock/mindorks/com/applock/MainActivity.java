@@ -6,50 +6,103 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
+
+import com.mikepenz.iconics.typeface.FontAwesome;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.Nameable;
+import com.mikepenz.materialdrawer.util.KeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import applock.mindorks.com.applock.Adapter.ApplicationListAdapter;
 import applock.mindorks.com.applock.Data.AppInfo;
+import applock.mindorks.com.applock.Fragments.AllAppFragment;
+import applock.mindorks.com.applock.Fragments.PasswordFragment;
+import applock.mindorks.com.applock.Fragments.SettingFragment;
 import applock.mindorks.com.applock.services.AppCheckServices;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    //save our header or result
+    private Drawer.Result result = null;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayShowHomeEnabled(true);
-//        actionBar.setIcon(R.drawable.abc_btn_rating_star_off_mtrl_alpha);
-        actionBar.setTitle(Html.fromHtml("<font color='#ffffff'>App Lock</font>"));
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-
-        mAdapter = new ApplicationListAdapter(getListOfInstalledApp(getApplicationContext()), getApplicationContext());
-        mRecyclerView.setAdapter(mAdapter);
-
         startService(new Intent(MainActivity.this, AppCheckServices.class));
+        fragmentManager = getSupportFragmentManager();
+
+        // Handle Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        //Create the drawer
+        result = new Drawer()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("All App").withIcon(FontAwesome.Icon.faw_home),
+                        new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog),
+                        new SecondaryDrawerItem().withName("Password").withIcon(FontAwesome.Icon.faw_question)
+
+                ) // add the items we want to use with our Drawer
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                        if (drawerItem != null && drawerItem instanceof Nameable) {
+
+                            if (position == 0) {
+                                getSupportActionBar().setTitle("AllAppFragment");
+                                Fragment f = AllAppFragment.newInstance("");
+                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                            }
+                            if (position == 1) {
+                                getSupportActionBar().setTitle("SettingFragment");
+                                Fragment f = SettingFragment.newInstance("");
+                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                            }
+                            if (position == 2) {
+                                getSupportActionBar().setTitle("PasswordFragment");
+                                Fragment f = PasswordFragment.newInstance("");
+                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                            }
+                        }
+                    }
+                })
+                .withOnDrawerListener(new Drawer.OnDrawerListener() {
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        KeyboardUtil.hideKeyboard(MainActivity.this);
+                    }
+
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+
+
+                    }
+                })
+                .withFireOnInitialOnClick(true)
+                .withSavedInstance(savedInstanceState)
+                .build();
+
+
+        //react on the keyboard
+        result.keyboardSupportEnabled(this, true);
+
     }
 
     @Override
@@ -60,32 +113,49 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(i);
-            return true;
+        if (getCurrentFragment() instanceof AllAppFragment) {
+            super.onBackPressed();
+        } else {
+            fragmentManager.popBackStack();
+            getSupportActionBar().setTitle("AllAppFragment");
+            Fragment f = AllAppFragment.newInstance("");
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * Returns currentfragment
+     *
+     * @return
+     */
+    public Fragment getCurrentFragment() {
+        // TODO Auto-generated method stub
+        return getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+//            startActivity(i);
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     /**
@@ -93,7 +163,7 @@ public class MainActivity extends ActionBarActivity {
      *
      * @return ArrayList of installed applications or null
      */
-    private static List<AppInfo> getListOfInstalledApp(Context context) {
+    public static List<AppInfo> getListOfInstalledApp(Context context) {
         PackageManager packageManager = context.getPackageManager();
         List<AppInfo> installedApps = new ArrayList();
         List<PackageInfo> apps = packageManager.getInstalledPackages(PackageManager.SIGNATURE_MATCH);

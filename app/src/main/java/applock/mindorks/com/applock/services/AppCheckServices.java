@@ -142,10 +142,7 @@ public class AppCheckServices extends Service {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         dialog.setContentView(promptsView);
-
-
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.show();
     }
