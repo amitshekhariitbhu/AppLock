@@ -113,13 +113,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getCurrentFragment() instanceof AllAppFragment) {
-            super.onBackPressed();
+        if (result != null && result.isDrawerOpen()) {
+            result.closeDrawer();
         } else {
-            fragmentManager.popBackStack();
-            getSupportActionBar().setTitle("AllAppFragment");
-            Fragment f = AllAppFragment.newInstance("");
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+            if (getCurrentFragment() instanceof AllAppFragment) {
+                super.onBackPressed();
+            } else {
+                fragmentManager.popBackStack();
+                getSupportActionBar().setTitle("AllAppFragment");
+                Fragment f = AllAppFragment.newInstance("");
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+            }
         }
     }
 
@@ -131,6 +135,13 @@ public class MainActivity extends AppCompatActivity {
     public Fragment getCurrentFragment() {
         // TODO Auto-generated method stub
         return getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //add the values which need to be saved from the drawer to the bundle
+        outState = result.saveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
 //    @Override
