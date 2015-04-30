@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import applock.mindorks.com.applock.AppLockConstants;
 import applock.mindorks.com.applock.Data.AppInfo;
 import applock.mindorks.com.applock.R;
 import applock.mindorks.com.applock.Utils.SharedPreference;
@@ -25,6 +26,7 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
     List<AppInfo> installedApps = new ArrayList();
     private Context context;
     SharedPreference sharedPreference;
+    String requiredAppsType;
 
     // Provide a reference to the views for each data item
 // Complex data items may need more than one view per item, and
@@ -58,10 +60,35 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ApplicationListAdapter(List<AppInfo> appInfoList, Context context) {
+    public ApplicationListAdapter(List<AppInfo> appInfoList, Context context, String requiredAppsType) {
         installedApps = appInfoList;
         this.context = context;
+        this.requiredAppsType = requiredAppsType;
         sharedPreference = new SharedPreference();
+        List<AppInfo> lockedFilteredAppList = new ArrayList<AppInfo>();
+        List<AppInfo> unlockedFilteredAppList = new ArrayList<AppInfo>();
+        boolean flag = true;
+        if (requiredAppsType.matches(AppLockConstants.LOCKED) || requiredAppsType.matches(AppLockConstants.UNLOCKED)) {
+            for (int i = 0; i < installedApps.size(); i++) {
+                flag = true;
+                for (int j = 0; j < sharedPreference.getLocked(context).size(); j++) {
+                    if (installedApps.get(i).getPackageName().matches(sharedPreference.getLocked(context).get(j))) {
+                        lockedFilteredAppList.add(installedApps.get(i));
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    unlockedFilteredAppList.add(installedApps.get(i));
+                }
+            }
+            if (requiredAppsType.matches(AppLockConstants.LOCKED)) {
+                installedApps.clear();
+                installedApps.addAll(lockedFilteredAppList);
+            } else if (requiredAppsType.matches(AppLockConstants.UNLOCKED)) {
+                installedApps.clear();
+                installedApps.addAll(unlockedFilteredAppList);
+            }
+        }
     }
 
     // Create new views (invoked by the layout manager)

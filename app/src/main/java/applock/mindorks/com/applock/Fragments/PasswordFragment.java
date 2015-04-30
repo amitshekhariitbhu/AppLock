@@ -23,7 +23,6 @@ import applock.mindorks.com.applock.R;
  * Created by amitshekhar on 30/04/15.
  */
 public class PasswordFragment extends Fragment {
-    private static final String KEY_TITLE = "title";
     Lock9View lock9View;
     Button confirmButton, retryButton;
     TextView textView;
@@ -33,11 +32,8 @@ public class PasswordFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    public static PasswordFragment newInstance(String title) {
+    public static PasswordFragment newInstance() {
         PasswordFragment f = new PasswordFragment();
-        Bundle args = new Bundle();
-        args.putString(KEY_TITLE, title);
-        f.setArguments(args);
         return (f);
     }
 

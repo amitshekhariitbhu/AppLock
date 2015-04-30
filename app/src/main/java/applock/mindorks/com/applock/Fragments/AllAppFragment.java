@@ -18,16 +18,14 @@ import applock.mindorks.com.applock.R;
  */
 public class AllAppFragment extends Fragment {
 
-    private static final String KEY_TITLE = "title";
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    static String requiredAppsType;
 
-    public static AllAppFragment newInstance(String title) {
+    public static AllAppFragment newInstance(String requiredApps) {
+        requiredAppsType = requiredApps;
         AllAppFragment f = new AllAppFragment();
-        Bundle args = new Bundle();
-        args.putString(KEY_TITLE, title);
-        f.setArguments(args);
         return (f);
     }
 
@@ -55,9 +53,7 @@ public class AllAppFragment extends Fragment {
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-
-        mAdapter = new ApplicationListAdapter(((MainActivity) getActivity()).getListOfInstalledApp(getActivity()), getActivity());
+        mAdapter = new ApplicationListAdapter(((MainActivity) getActivity()).getListOfInstalledApp(getActivity()), getActivity(), requiredAppsType);
         mRecyclerView.setAdapter(mAdapter);
 
         return v;

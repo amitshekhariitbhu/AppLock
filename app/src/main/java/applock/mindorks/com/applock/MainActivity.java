@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import com.mikepenz.iconics.typeface.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.KeyboardUtil;
@@ -51,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("All App").withIcon(FontAwesome.Icon.faw_home),
-                        new SecondaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_cog)
-//                        new SecondaryDrawerItem().withName("Password").withIcon(FontAwesome.Icon.faw_question)
-
+                        new PrimaryDrawerItem().withName("All Applications").withIcon(FontAwesome.Icon.faw_home),
+                        new PrimaryDrawerItem().withName("Locked Applications").withIcon(FontAwesome.Icon.faw_home),
+                        new PrimaryDrawerItem().withName("Unlocked Applications").withIcon(FontAwesome.Icon.faw_home),
+                        new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_exchange)
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -62,14 +61,26 @@ public class MainActivity extends AppCompatActivity {
                         if (drawerItem != null && drawerItem instanceof Nameable) {
 
                             if (position == 0) {
-                                getSupportActionBar().setTitle("AllAppFragment");
-                                Fragment f = AllAppFragment.newInstance("");
+                                getSupportActionBar().setTitle("All Applications");
+                                Fragment f = AllAppFragment.newInstance(AppLockConstants.ALL_APPS);
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
                             }
 
                             if (position == 1) {
+                                getSupportActionBar().setTitle("Locked Applications");
+                                Fragment f = AllAppFragment.newInstance(AppLockConstants.LOCKED);
+                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                            }
+
+                            if (position == 2) {
+                                getSupportActionBar().setTitle("Unlocked Applications");
+                                Fragment f = AllAppFragment.newInstance(AppLockConstants.UNLOCKED);
+                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                            }
+
+                            if (position == 3) {
                                 getSupportActionBar().setTitle("Change Password");
-                                Fragment f = PasswordFragment.newInstance("");
+                                Fragment f = PasswordFragment.newInstance();
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
                             }
 
@@ -121,8 +132,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 fragmentManager.popBackStack();
                 getSupportActionBar().setTitle("AllAppFragment");
-                Fragment f = AllAppFragment.newInstance("");
+                Fragment f = AllAppFragment.newInstance(AppLockConstants.ALL_APPS);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                result.setSelection(0);
             }
         }
     }
@@ -141,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the drawer to the bundle
         outState = result.saveInstanceState(outState);
+
         super.onSaveInstanceState(outState);
     }
 
