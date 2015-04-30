@@ -75,8 +75,6 @@ public class PasswordSetActivity extends AppCompatActivity {
                 } else if (isEnteringSecondTime) {
                     if (enteredPassword.matches(password)) {
                         confirmButton.setEnabled(true);
-
-                        //TODO save Password and go to main
                     } else {
                         Toast.makeText(getApplicationContext(), "Both Pattern did not match - Try again", Toast.LENGTH_SHORT).show();
                         isEnteringFirstTime = true;
@@ -85,11 +83,8 @@ public class PasswordSetActivity extends AppCompatActivity {
                         retryButton.setEnabled(false);
                     }
                 }
-
             }
         });
-
-
     }
 
     @Override

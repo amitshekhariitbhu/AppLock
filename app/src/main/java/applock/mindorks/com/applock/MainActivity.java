@@ -1,7 +1,6 @@
 package applock.mindorks.com.applock;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,8 +26,6 @@ import java.util.List;
 import applock.mindorks.com.applock.Data.AppInfo;
 import applock.mindorks.com.applock.Fragments.AllAppFragment;
 import applock.mindorks.com.applock.Fragments.PasswordFragment;
-import applock.mindorks.com.applock.Fragments.SettingFragment;
-import applock.mindorks.com.applock.services.AppCheckServices;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("All App").withIcon(FontAwesome.Icon.faw_home),
-                        new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog),
-                        new SecondaryDrawerItem().withName("Password").withIcon(FontAwesome.Icon.faw_question)
+                        new SecondaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_cog)
+//                        new SecondaryDrawerItem().withName("Password").withIcon(FontAwesome.Icon.faw_question)
 
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -69,16 +66,19 @@ public class MainActivity extends AppCompatActivity {
                                 Fragment f = AllAppFragment.newInstance("");
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
                             }
+
                             if (position == 1) {
-                                getSupportActionBar().setTitle("SettingFragment");
-                                Fragment f = SettingFragment.newInstance("");
-                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
-                            }
-                            if (position == 2) {
-                                getSupportActionBar().setTitle("PasswordFragment");
+                                getSupportActionBar().setTitle("Change Password");
                                 Fragment f = PasswordFragment.newInstance("");
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
                             }
+
+//                            if (position == 2) {
+//                                getSupportActionBar().setTitle("SettingFragment");
+//                                Fragment f = SettingFragment.newInstance("");
+//                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+//                            }
+
                         }
                     }
                 })
