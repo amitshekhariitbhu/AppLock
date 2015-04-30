@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import applock.mindorks.com.applock.AppLockConstants;
+
 public class SharedPreference {
-    public static final String PREFS_NAME = "APP_LOCK";
     public static final String LOCKED_APP = "locked_app";
 
     public SharedPreference() {
@@ -26,7 +27,7 @@ public class SharedPreference {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
 
-        settings = context.getSharedPreferences(PREFS_NAME,
+        settings = context.getSharedPreferences(AppLockConstants.MyPREFERENCES,
                 Context.MODE_PRIVATE);
         editor = settings.edit();
         Gson gson = new Gson();
@@ -55,7 +56,7 @@ public class SharedPreference {
         SharedPreferences settings;
         List<String> locked;
 
-        settings = context.getSharedPreferences(PREFS_NAME,
+        settings = context.getSharedPreferences(AppLockConstants.MyPREFERENCES,
                 Context.MODE_PRIVATE);
 
         if (settings.contains(LOCKED_APP)) {
@@ -69,5 +70,14 @@ public class SharedPreference {
         } else
             return null;
         return (ArrayList<String>) locked;
+    }
+
+    public String getPassword(Context context) {
+        SharedPreferences passwordPref;
+        passwordPref = context.getSharedPreferences(AppLockConstants.MyPREFERENCES, Context.MODE_PRIVATE);
+        if (passwordPref.contains(AppLockConstants.PASSWORD)) {
+            return passwordPref.getString(AppLockConstants.PASSWORD, "");
+        }
+        return "";
     }
 }

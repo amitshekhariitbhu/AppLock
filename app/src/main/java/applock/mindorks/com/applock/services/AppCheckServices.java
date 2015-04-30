@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.takwolf.android.lock9.Lock9View;
 
@@ -47,7 +48,9 @@ public class AppCheckServices extends Service {
         super.onCreate();
         context = getApplicationContext();
         sharedPreference = new SharedPreference();
-        pakageName = sharedPreference.getLocked(context);
+        if (sharedPreference != null) {
+            pakageName = sharedPreference.getLocked(context);
+        }
         timer = new Timer("AppCheckServices");
         timer.schedule(updateTask, 1000L, 1000L);
 
@@ -73,12 +76,9 @@ public class AppCheckServices extends Service {
         @Override
         public void run() {
             Log.d(TAG, "football keep going");
-            pakageName = sharedPreference.getLocked(context);
-            Log.d(TAG, "football keep going size " + pakageName.size());
-            for (int i = 0; i < pakageName.size(); i++) {
-                Log.d(TAG, "football keep going pakageName " + pakageName.get(i));
+            if (sharedPreference != null) {
+                pakageName = sharedPreference.getLocked(context);
             }
-
             if (isConcernedAppIsInForeground()) {
                 Log.d(TAG, "football true");
                 if (imageView != null) {
@@ -130,8 +130,10 @@ public class AppCheckServices extends Service {
         lock9View.setCallBack(new Lock9View.CallBack() {
             @Override
             public void onFinish(String password) {
-                if (password.matches("123")) {
+                if (password.matches(sharedPreference.getPassword(context))) {
                     dialog.dismiss();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Wrong Pattern Try Again", Toast.LENGTH_SHORT).show();
                 }
             }
         });
