@@ -30,7 +30,7 @@
         </receiver>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,25 +38,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="applock.mindorks.com.applock.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName="applock.mindorks.com.applock.MainActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="applock.mindorks.com.applock.MainActivity" />
-        </activity>
 
         <activity
-            android:name="applock.mindorks.com.applock.PasswordActivity"
-            android:label="@string/action_password"
-            android:parentActivityName="applock.mindorks.com.applock.SettingsActivity">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="applock.mindorks.com.applock.SettingsActivity" />
-        </activity>
+            android:name=".MainActivity"
+            android:label="@string/app_name"></activity>
+
 
     </application>
 
