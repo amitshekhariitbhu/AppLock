@@ -37,7 +37,11 @@ public class NewAppInstalledReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
             String[] a = intent.getDataString().split(":");
             String packageName = a[a.length - 1];
-            showDialogToAskForNewAppInstalled(context, appName(context, packageName), packageName);
+            if (sharedPreference != null) {
+                if (!sharedPreference.getPassword(context).isEmpty()) {
+                    showDialogToAskForNewAppInstalled(context, appName(context, packageName), packageName);
+                }
+            }
         }
 
         if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {

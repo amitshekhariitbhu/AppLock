@@ -1,5 +1,7 @@
 package applock.mindorks.com.applock;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +18,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import applock.mindorks.com.applock.services.AlarmReceiver;
 import applock.mindorks.com.applock.services.AppCheckServices;
 
 /**
@@ -36,6 +39,20 @@ public class SplashActivity extends AppCompatActivity {
 
         /****************************** too much important don't miss it *****************************/
         startService(new Intent(SplashActivity.this, AppCheckServices.class));
+
+        try {
+            Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+            AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 999, alarmIntent, 0);
+            int interval = (86400 * 1000) / 4;
+            if (manager != null) {
+                manager.cancel(pendingIntent);
+            }
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         /***************************************************************************************/
 
         LinearLayout linearLayout = new LinearLayout(this);
