@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -32,12 +33,25 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         context = getApplicationContext();
+
+        /****************************** too much important don't miss it *****************************/
         startService(new Intent(SplashActivity.this, AppCheckServices.class));
+        /***************************************************************************************/
+
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setBackgroundColor(getResources().getColor(R.color.primary_dark));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setLayoutParams(layoutParams);
+
+        TextView textView = new TextView(this);
+        textView.setText(getResources().getString(R.string.app_name));
+        textView.setTextColor(getResources().getColor(R.color.white));
+        textView.setTextSize(32);
+        textView.setGravity(Gravity.CENTER);
+        linearLayout.addView(textView);
+
         ImageView imageView = new ImageView(this);
         imageView.setImageDrawable(getResources().getDrawable(R.drawable.bg_splash));
         linearLayout.addView(imageView);
