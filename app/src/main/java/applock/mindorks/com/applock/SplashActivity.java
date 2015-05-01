@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -33,7 +35,11 @@ public class SplashActivity extends AppCompatActivity {
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setBackgroundColor(getResources().getColor(R.color.md_blue_500));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setLayoutParams(layoutParams);
+        ImageView imageView = new ImageView(this);
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.bg_splash));
+        linearLayout.addView(imageView);
         setContentView(linearLayout);
         sharedPreferences = getSharedPreferences(AppLockConstants.MyPREFERENCES, MODE_PRIVATE);
         final boolean isPasswordSet = sharedPreferences.getBoolean(AppLockConstants.IS_PASSWORD_SET, false);
