@@ -17,6 +17,7 @@ import java.util.List;
 import applock.mindorks.com.applock.AppLockConstants;
 import applock.mindorks.com.applock.Data.AppInfo;
 import applock.mindorks.com.applock.R;
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 import applock.mindorks.com.applock.Utils.SharedPreference;
 
 /**
@@ -122,8 +123,10 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
         holder.switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Lock Clicked", "lock_clicked", appInfo.getPackageName());
                     sharedPreference.addLocked(context, appInfo.getPackageName());
                 } else {
+                    AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Unlock Clicked", "unlock_clicked", appInfo.getPackageName());
                     sharedPreference.removeLocked(context, appInfo.getPackageName());
                 }
             }

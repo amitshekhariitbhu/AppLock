@@ -1,5 +1,6 @@
 package applock.mindorks.com.applock;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,10 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import applock.mindorks.com.applock.services.AppCheckServices;
 
@@ -18,10 +23,12 @@ public class SplashActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 2000;
     SharedPreferences sharedPreferences;
+    Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         startService(new Intent(SplashActivity.this, AppCheckServices.class));
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setBackgroundColor(getResources().getColor(R.color.md_blue_500));
@@ -43,6 +50,18 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+
+        //Google Analytics
+        Tracker t = ((AppLockApplication) getApplication()).getTracker(AppLockApplication.TrackerName.APP_TRACKER);
+        t.setScreenName(AppLockConstants.SPLASH_SCREEN);
+        t.send(new HitBuilders.AppViewBuilder().build());
+
+    }
+
+    @Override
+    protected void onStart() {
+        GoogleAnalytics.getInstance(context).reportActivityStart(this);
+        super.onStart();
     }
 
     @Override
@@ -52,6 +71,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        GoogleAnalytics.getInstance(context).reportActivityStop(this);
+        super.onStop();
         super.onStop();
     }
 }

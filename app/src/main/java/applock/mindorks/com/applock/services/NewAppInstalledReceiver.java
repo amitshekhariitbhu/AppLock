@@ -8,13 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import applock.mindorks.com.applock.AppLockConstants;
 import applock.mindorks.com.applock.R;
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 import applock.mindorks.com.applock.Utils.SharedPreference;
 
 /**
@@ -33,14 +34,12 @@ public class NewAppInstalledReceiver extends BroadcastReceiver {
             String[] a = intent.getDataString().split(":");
             String packageName = a[a.length - 1];
             showDialogToAskForNewAppInstalled(context, appName(context, packageName), packageName);
-            Log.d("football", "footballfootball PACKAGE_ADDED " + appName(context, packageName));
         }
 
         if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
             String[] a = intent.getDataString().split(":");
             String packageName = a[a.length - 1];
             sharedPreference.removeLocked(context, packageName);
-            Log.d("football", "footballfootball PACKAGE_REMOVED " + appName(context, packageName));
         }
     }
 
@@ -67,11 +66,14 @@ public class NewAppInstalledReceiver extends BroadcastReceiver {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
                         sharedPreference.addLocked(context, packageName);
+                        AppLockLogEvents.logEvents(AppLockConstants.NEW_APP_INSTALL_DIALOG_BOX, "Lock Clicked", "lock_clicked", packageName);
                     }
                 });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
+                AppLockLogEvents.logEvents(AppLockConstants.NEW_APP_INSTALL_DIALOG_BOX, "Cancel Clicked", "cancel_clicked", "");
+
             }
         });
 
@@ -88,6 +90,7 @@ public class NewAppInstalledReceiver extends BroadcastReceiver {
                 if (keyCode == KeyEvent.KEYCODE_BACK
                         && event.getAction() == KeyEvent.ACTION_UP) {
                     dialog.cancel();
+                    AppLockLogEvents.logEvents(AppLockConstants.NEW_APP_INSTALL_DIALOG_BOX, "Cancel Clicked", "cancel_clicked", "");
                 }
                 return true;
             }
@@ -95,6 +98,7 @@ public class NewAppInstalledReceiver extends BroadcastReceiver {
         WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
         wmlp.gravity = Gravity.CENTER;
         dialog.show();
+        AppLockLogEvents.logEvents(AppLockConstants.NEW_APP_INSTALL_DIALOG_BOX, "New App Installed Dialog Shown", "new_app_installed_dialog_shown", packageName);
     }
 
 

@@ -18,6 +18,7 @@ import com.takwolf.android.lock9.Lock9View;
 import applock.mindorks.com.applock.AppLockConstants;
 import applock.mindorks.com.applock.MainActivity;
 import applock.mindorks.com.applock.R;
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 
 /**
  * Created by amitshekhar on 30/04/15.
@@ -73,6 +74,8 @@ public class PasswordFragment extends Fragment {
                 Intent i = new Intent(getActivity(), MainActivity.class);
                 getActivity().startActivity(i);
                 getActivity().finish();
+                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Confirm Password", "confirm_password", "");
+
             }
         });
         retryButton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +86,7 @@ public class PasswordFragment extends Fragment {
                 textView.setText("Draw Pattern");
                 confirmButton.setEnabled(false);
                 retryButton.setEnabled(false);
+                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Retry Password", "retry_password", "");
             }
         });
 

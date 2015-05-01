@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyDashes">
+    <integer name="ga_sessionTimeout">300</integer>
+
+    <!-- Enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!--&lt;!&ndash; The screen names that will appear in reports &ndash;&gt;-->
+    <!--<screenName name="com.google.android.gms.analytics.samples.mobileplayground.ScreenviewFragment">-->
+    <!--AnalyticsSampleApp ScreenViewSampleScreen-->
+    <!--</screenName>-->
+    <!--<screenName name="com.google.android.gms.analytics.samples.mobileplayground.EcommerceFragment">-->
+    <!--AnalyticsSampleApp EcommerceSampleScreen-->
+    <!--</screenName>-->
+    <!--  The following value should be replaced with correct property id. -->
+    <string name="ga_trackingId">UA-62504955-1</string>
+</resources>

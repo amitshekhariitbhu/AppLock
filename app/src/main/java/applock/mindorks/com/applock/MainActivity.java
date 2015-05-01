@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.mikepenz.iconics.typeface.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -25,6 +28,7 @@ import java.util.List;
 import applock.mindorks.com.applock.Data.AppInfo;
 import applock.mindorks.com.applock.Fragments.AllAppFragment;
 import applock.mindorks.com.applock.Fragments.PasswordFragment;
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,11 +36,17 @@ public class MainActivity extends AppCompatActivity {
     //save our header or result
     private Drawer.Result result = null;
     FragmentManager fragmentManager;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = getApplicationContext();
+        //Google Analytics
+        Tracker t = ((AppLockApplication) getApplication()).getTracker(AppLockApplication.TrackerName.APP_TRACKER);
+        t.setScreenName(AppLockConstants.MAIN_SCREEN);
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         fragmentManager = getSupportFragmentManager();
 
@@ -64,31 +74,29 @@ public class MainActivity extends AppCompatActivity {
                                 getSupportActionBar().setTitle("All Applications");
                                 Fragment f = AllAppFragment.newInstance(AppLockConstants.ALL_APPS);
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Show All Applications Clicked", "show_all_applications_clicked", "");
                             }
 
                             if (position == 1) {
                                 getSupportActionBar().setTitle("Locked Applications");
                                 Fragment f = AllAppFragment.newInstance(AppLockConstants.LOCKED);
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Show Locked Applications Clicked", "show_locked_applications_clicked", "");
                             }
 
                             if (position == 2) {
                                 getSupportActionBar().setTitle("Unlocked Applications");
                                 Fragment f = AllAppFragment.newInstance(AppLockConstants.UNLOCKED);
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Show Unlocked Applications Clicked", "show_unLocked_applications_clicked", "");
                             }
 
                             if (position == 3) {
                                 getSupportActionBar().setTitle("Change Password");
                                 Fragment f = PasswordFragment.newInstance();
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
+                                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Password Changed Clicked", "password_changed_clicked", "");
                             }
-
-//                            if (position == 2) {
-//                                getSupportActionBar().setTitle("SettingFragment");
-//                                Fragment f = SettingFragment.newInstance("");
-//                                fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
-//                            }
 
                         }
                     }
@@ -229,5 +237,17 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    @Override
+    protected void onStart() {
+        GoogleAnalytics.getInstance(context).reportActivityStart(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        GoogleAnalytics.getInstance(context).reportActivityStop(this);
+        super.onStop();
+        super.onStop();
+    }
 
 }

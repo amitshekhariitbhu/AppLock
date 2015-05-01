@@ -1,5 +1,6 @@
 package applock.mindorks.com.applock;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,7 +11,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.takwolf.android.lock9.Lock9View;
+
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 
 /**
  * Created by amitshekhar on 30/04/15.
@@ -24,10 +30,12 @@ public class PasswordSetActivity extends AppCompatActivity {
     String enteredPassword;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         setContentView(R.layout.activity_password_set);
         lock9View = (Lock9View) findViewById(R.id.lock_9_view);
         confirmButton = (Button) findViewById(R.id.confirmButton);
@@ -37,6 +45,11 @@ public class PasswordSetActivity extends AppCompatActivity {
         retryButton.setEnabled(false);
         sharedPreferences = getSharedPreferences(AppLockConstants.MyPREFERENCES, MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        //Google Analytics
+        Tracker t = ((AppLockApplication) getApplication()).getTracker(AppLockApplication.TrackerName.APP_TRACKER);
+        t.setScreenName(AppLockConstants.FIRST_TIME_PASSWORD_SET_SCREEN);
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +63,7 @@ public class PasswordSetActivity extends AppCompatActivity {
                 Intent i = new Intent(PasswordSetActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();
+                AppLockLogEvents.logEvents(AppLockConstants.FIRST_TIME_PASSWORD_SET_SCREEN, "Confirm Password", "confirm_password", "");
             }
         });
         retryButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +74,7 @@ public class PasswordSetActivity extends AppCompatActivity {
                 textView.setText("Draw Pattern");
                 confirmButton.setEnabled(false);
                 retryButton.setEnabled(false);
+                AppLockLogEvents.logEvents(AppLockConstants.FIRST_TIME_PASSWORD_SET_SCREEN, "Retry Password", "retry_password", "");
             }
         });
 
@@ -93,7 +108,15 @@ public class PasswordSetActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        GoogleAnalytics.getInstance(context).reportActivityStart(this);
+        super.onStart();
+    }
+
+    @Override
     protected void onStop() {
+        GoogleAnalytics.getInstance(context).reportActivityStop(this);
+        super.onStop();
         super.onStop();
     }
 }

@@ -18,13 +18,18 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.takwolf.android.lock9.Lock9View;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import applock.mindorks.com.applock.AppLockApplication;
+import applock.mindorks.com.applock.AppLockConstants;
 import applock.mindorks.com.applock.R;
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 import applock.mindorks.com.applock.Utils.SharedPreference;
 
 /**
@@ -53,6 +58,10 @@ public class AppCheckServices extends Service {
         }
         timer = new Timer("AppCheckServices");
         timer.schedule(updateTask, 1000L, 1000L);
+
+        final Tracker t = ((AppLockApplication) getApplication()).getTracker(AppLockApplication.TrackerName.APP_TRACKER);
+        t.setScreenName(AppLockConstants.APP_LOCK);
+        t.send(new HitBuilders.AppViewBuilder().build());
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         imageView = new ImageView(this);
@@ -132,8 +141,10 @@ public class AppCheckServices extends Service {
             public void onFinish(String password) {
                 if (password.matches(sharedPreference.getPassword(context))) {
                     dialog.dismiss();
+                    AppLockLogEvents.logEvents(AppLockConstants.PASSWORD_CHECK_SCREEN, "Correct Password", "correct_password", "");
                 } else {
                     Toast.makeText(getApplicationContext(), "Wrong Pattern Try Again", Toast.LENGTH_SHORT).show();
+                    AppLockLogEvents.logEvents(AppLockConstants.PASSWORD_CHECK_SCREEN, "Wrong Password", "wrong_password", "");
                 }
             }
         });
@@ -147,6 +158,7 @@ public class AppCheckServices extends Service {
         dialog.setContentView(promptsView);
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.show();
+
     }
 
     @Override
