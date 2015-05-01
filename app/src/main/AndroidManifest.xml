@@ -15,6 +15,15 @@
             android:name="applock.mindorks.com.applock.services.AppCheckServices"
             android:exported="false" />
 
+        <receiver android:name="applock.mindorks.com.applock.services.NewAppInstalledReceiver">
+            <intent-filter android:priority="100">
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name="applock.mindorks.com.applock.services.BootComplete"
             android:exported="true">
