@@ -72,10 +72,12 @@ public class ApplicationListAdapter extends RecyclerView.Adapter<ApplicationList
         if (requiredAppsType.matches(AppLockConstants.LOCKED) || requiredAppsType.matches(AppLockConstants.UNLOCKED)) {
             for (int i = 0; i < installedApps.size(); i++) {
                 flag = true;
-                for (int j = 0; j < sharedPreference.getLocked(context).size(); j++) {
-                    if (installedApps.get(i).getPackageName().matches(sharedPreference.getLocked(context).get(j))) {
-                        lockedFilteredAppList.add(installedApps.get(i));
-                        flag = false;
+                if (sharedPreference.getLocked(context) != null) {
+                    for (int j = 0; j < sharedPreference.getLocked(context).size(); j++) {
+                        if (installedApps.get(i).getPackageName().matches(sharedPreference.getLocked(context).get(j))) {
+                            lockedFilteredAppList.add(installedApps.get(i));
+                            flag = false;
+                        }
                     }
                 }
                 if (flag) {
