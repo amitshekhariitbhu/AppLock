@@ -30,16 +30,18 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         context = getApplicationContext();
         startService(new Intent(SplashActivity.this, AppCheckServices.class));
         LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setBackgroundColor(getResources().getColor(R.color.md_blue_500));
+        linearLayout.setBackgroundColor(getResources().getColor(R.color.primary_dark));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setLayoutParams(layoutParams);
         ImageView imageView = new ImageView(this);
         imageView.setImageDrawable(getResources().getDrawable(R.drawable.bg_splash));
         linearLayout.addView(imageView);
+
         setContentView(linearLayout);
         sharedPreferences = getSharedPreferences(AppLockConstants.MyPREFERENCES, MODE_PRIVATE);
         final boolean isPasswordSet = sharedPreferences.getBoolean(AppLockConstants.IS_PASSWORD_SET, false);
