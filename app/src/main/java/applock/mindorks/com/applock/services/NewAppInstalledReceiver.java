@@ -30,6 +30,10 @@ public class NewAppInstalledReceiver extends BroadcastReceiver {
         context.startService(new Intent(context, AppCheckServices.class));
         sharedPreference = new SharedPreference();
 
+        if (!intent.getAction().equals(Intent.ACTION_PACKAGE_REPLACED) && intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+            return;
+        }
+
         if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
             String[] a = intent.getDataString().split(":");
             String packageName = a[a.length - 1];
