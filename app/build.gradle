@@ -8,8 +8,8 @@ android {
         applicationId "applock.mindorks.com.applock"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -31,4 +31,5 @@ dependencies {
     }
     compile 'com.google.android.gms:play-services-gcm:7.0.+'
     compile 'com.google.android.gms:play-services-analytics:7.0.+'
+
 }
