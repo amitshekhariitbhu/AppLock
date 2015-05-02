@@ -28,6 +28,8 @@ import java.util.TimerTask;
 
 import applock.mindorks.com.applock.AppLockApplication;
 import applock.mindorks.com.applock.AppLockConstants;
+import applock.mindorks.com.applock.Custom.FlatButton;
+import applock.mindorks.com.applock.PasswordRecoveryActivity;
 import applock.mindorks.com.applock.R;
 import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 import applock.mindorks.com.applock.Utils.SharedPreference;
@@ -135,7 +137,7 @@ public class AppCheckServices extends Service {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptsView = layoutInflater.inflate(R.layout.popup_unlock, null);
         Lock9View lock9View = (Lock9View) promptsView.findViewById(R.id.lock_9_view);
-
+        FlatButton forgetPassword = (FlatButton) promptsView.findViewById(R.id.forgetPassword);
         lock9View.setCallBack(new Lock9View.CallBack() {
             @Override
             public void onFinish(String password) {
@@ -148,6 +150,17 @@ public class AppCheckServices extends Service {
                 }
             }
         });
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AppCheckServices.this, PasswordRecoveryActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                dialog.dismiss();
+            }
+        });
+
 
         dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.setCanceledOnTouchOutside(false);

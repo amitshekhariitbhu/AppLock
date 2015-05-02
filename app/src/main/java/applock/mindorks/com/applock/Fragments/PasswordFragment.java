@@ -9,13 +9,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.takwolf.android.lock9.Lock9View;
 
 import applock.mindorks.com.applock.AppLockConstants;
+import applock.mindorks.com.applock.Custom.FlatButton;
 import applock.mindorks.com.applock.MainActivity;
 import applock.mindorks.com.applock.R;
 import applock.mindorks.com.applock.Utils.AppLockLogEvents;
@@ -25,7 +25,7 @@ import applock.mindorks.com.applock.Utils.AppLockLogEvents;
  */
 public class PasswordFragment extends Fragment {
     Lock9View lock9View;
-    Button confirmButton, retryButton;
+    FlatButton confirmButton, retryButton;
     TextView textView;
     boolean isEnteringFirstTime = true;
     boolean isEnteringSecondTime = false;
@@ -54,8 +54,8 @@ public class PasswordFragment extends Fragment {
         View v = inflater.inflate(R.layout.activity_password_set, container, false);
 
         lock9View = (Lock9View) v.findViewById(R.id.lock_9_view);
-        confirmButton = (Button) v.findViewById(R.id.confirmButton);
-        retryButton = (Button) v.findViewById(R.id.retryButton);
+        confirmButton = (FlatButton) v.findViewById(R.id.confirmButton);
+        retryButton = (FlatButton) v.findViewById(R.id.retryButton);
         textView = (TextView) v.findViewById(R.id.textView);
         confirmButton.setEnabled(false);
         retryButton.setEnabled(false);

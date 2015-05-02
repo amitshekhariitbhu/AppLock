@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +15,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.takwolf.android.lock9.Lock9View;
 
+import applock.mindorks.com.applock.Custom.FlatButton;
 import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 
 /**
@@ -23,7 +23,7 @@ import applock.mindorks.com.applock.Utils.AppLockLogEvents;
  */
 public class PasswordSetActivity extends AppCompatActivity {
     Lock9View lock9View;
-    Button confirmButton, retryButton;
+    FlatButton confirmButton, retryButton;
     TextView textView;
     boolean isEnteringFirstTime = true;
     boolean isEnteringSecondTime = false;
@@ -38,8 +38,8 @@ public class PasswordSetActivity extends AppCompatActivity {
         context = getApplicationContext();
         setContentView(R.layout.activity_password_set);
         lock9View = (Lock9View) findViewById(R.id.lock_9_view);
-        confirmButton = (Button) findViewById(R.id.confirmButton);
-        retryButton = (Button) findViewById(R.id.retryButton);
+        confirmButton = (FlatButton) findViewById(R.id.confirmButton);
+        retryButton = (FlatButton) findViewById(R.id.retryButton);
         textView = (TextView) findViewById(R.id.textView);
         confirmButton.setEnabled(false);
         retryButton.setEnabled(false);
@@ -57,10 +57,8 @@ public class PasswordSetActivity extends AppCompatActivity {
                 editor.putString(AppLockConstants.PASSWORD, enteredPassword);
                 editor.commit();
 
-                editor.putBoolean(AppLockConstants.IS_PASSWORD_SET, true);
-                editor.commit();
 
-                Intent i = new Intent(PasswordSetActivity.this, MainActivity.class);
+                Intent i = new Intent(PasswordSetActivity.this, PasswordRecoverSetActivity.class);
                 startActivity(i);
                 finish();
                 AppLockLogEvents.logEvents(AppLockConstants.FIRST_TIME_PASSWORD_SET_SCREEN, "Confirm Password", "confirm_password", "");
