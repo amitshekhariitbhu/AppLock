@@ -43,6 +43,7 @@ public class PasswordActivity extends AppCompatActivity {
             @Override
             public void onFinish(String password) {
                 if (sharedPreferences.getString(AppLockConstants.PASSWORD, "").matches(password)) {
+                    Toast.makeText(getApplicationContext(), "Success : Password Match", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(PasswordActivity.this, MainActivity.class);
                     startActivity(i);
                     finish();
