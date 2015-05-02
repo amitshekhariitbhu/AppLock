@@ -15,6 +15,7 @@
         android:allowBackup="true"
         android:largeHeap="true"
         android:allowClearUserData="false"
+        android:manageSpaceActivity="applock.mindorks.com.applock.ManageSpaceActivity"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -55,7 +56,8 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,27 +68,38 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:excludeFromRecents="true"></activity>
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".PasswordActivity"
             android:label="@string/app_name"
-            android:excludeFromRecents="true"></activity>
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".PasswordSetActivity"
             android:label="@string/app_name"
-            android:excludeFromRecents="true"></activity>
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".PasswordRecoverSetActivity"
             android:label="@string/app_name"
-            android:excludeFromRecents="true"></activity>
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".PasswordRecoveryActivity"
             android:label="@string/app_name"
-            android:excludeFromRecents="true"></activity>
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".ManageSpaceActivity"
+            android:label="@string/app_name"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"></activity>
 
 
     </application>
