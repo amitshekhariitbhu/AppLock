@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import applock.mindorks.com.applock.Custom.FlatButton;
+import applock.mindorks.com.applock.Utils.AppLockLogEvents;
 
 /**
  * Created by amitshekhar on 02/05/15.
@@ -94,7 +95,7 @@ public class PasswordRecoverSetActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Please select a question and write an answer", Toast.LENGTH_SHORT).show();
                 }
-
+                AppLockLogEvents.logEvents(AppLockConstants.PASSWORD_RECOVER_SET_SCREEN, "Confirm", "confirm", "");
             }
         });
 

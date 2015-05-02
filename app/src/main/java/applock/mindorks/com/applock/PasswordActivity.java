@@ -59,6 +59,7 @@ public class PasswordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(PasswordActivity.this, PasswordRecoveryActivity.class);
                 startActivity(i);
+                AppLockLogEvents.logEvents(AppLockConstants.PASSWORD_CHECK_SCREEN, "Forget Password", "forget_password", "");
             }
         });
     }

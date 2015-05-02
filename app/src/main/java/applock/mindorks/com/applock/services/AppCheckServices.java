@@ -158,6 +158,7 @@ public class AppCheckServices extends Service {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 dialog.dismiss();
+                AppLockLogEvents.logEvents(AppLockConstants.PASSWORD_CHECK_SCREEN, "Forget Password", "forget_password", "");
             }
         });
 
