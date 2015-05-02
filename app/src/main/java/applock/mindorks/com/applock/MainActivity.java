@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("All Applications").withIcon(FontAwesome.Icon.faw_home),
-                        new PrimaryDrawerItem().withName("Locked Applications").withIcon(FontAwesome.Icon.faw_home),
-                        new PrimaryDrawerItem().withName("Unlocked Applications").withIcon(FontAwesome.Icon.faw_home),
+                        new PrimaryDrawerItem().withName("Locked Applications").withIcon(FontAwesome.Icon.faw_lock),
+                        new PrimaryDrawerItem().withName("Unlocked Applications").withIcon(FontAwesome.Icon.faw_unlock),
                         new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_exchange)
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
