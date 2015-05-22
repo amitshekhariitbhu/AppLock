@@ -147,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
         //react on the keyboard
         result.keyboardSupportEnabled(this, true);
 
-
-        Log.d("amitShekhar :", "numOfTimesAppOpened " + String.valueOf(numOfTimesAppOpened));
-        Log.d("amitShekhar :", "isRated " + String.valueOf(isRated));
-
-
         if ((MyUtils.isInternetConnected(getApplicationContext()) && !isRated) && (numOfTimesAppOpened == 5 || numOfTimesAppOpened == 8 || numOfTimesAppOpened == 10 || numOfTimesAppOpened >= 12)) {
             showRateDialog().show();
         }
