@@ -1,16 +1,27 @@
 package applock.mindorks.com.applock;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.RatingBar;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -25,10 +36,12 @@ import com.mikepenz.materialdrawer.util.KeyboardUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import applock.mindorks.com.applock.Custom.FlatButton;
 import applock.mindorks.com.applock.Data.AppInfo;
 import applock.mindorks.com.applock.Fragments.AllAppFragment;
 import applock.mindorks.com.applock.Fragments.PasswordFragment;
 import applock.mindorks.com.applock.Utils.AppLockLogEvents;
+import applock.mindorks.com.applock.Utils.MyUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,12 +50,24 @@ public class MainActivity extends AppCompatActivity {
     private Drawer.Result result = null;
     FragmentManager fragmentManager;
     Context context;
+    Dialog dialog;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    long numOfTimesAppOpened = 0;
+    boolean isRated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
+        sharedPreferences = getSharedPreferences(AppLockConstants.MyPREFERENCES, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        numOfTimesAppOpened = sharedPreferences.getLong(AppLockConstants.NUM_OF_TIMES_APP_OPENED, 0) + 1;
+        isRated = sharedPreferences.getBoolean(AppLockConstants.IS_RATED, false);
+        editor.putLong(AppLockConstants.NUM_OF_TIMES_APP_OPENED, numOfTimesAppOpened);
+        editor.commit();
+
         //Google Analytics
         Tracker t = ((AppLockApplication) getApplication()).getTracker(AppLockApplication.TrackerName.APP_TRACKER);
         t.setScreenName(AppLockConstants.MAIN_SCREEN);
@@ -122,6 +147,14 @@ public class MainActivity extends AppCompatActivity {
         //react on the keyboard
         result.keyboardSupportEnabled(this, true);
 
+
+        Log.d("amitShekhar :", "numOfTimesAppOpened " + String.valueOf(numOfTimesAppOpened));
+        Log.d("amitShekhar :", "isRated " + String.valueOf(isRated));
+
+
+        if ((MyUtils.isInternetConnected(getApplicationContext()) && !isRated) && (numOfTimesAppOpened == 5 || numOfTimesAppOpened == 8 || numOfTimesAppOpened == 10 || numOfTimesAppOpened >= 12)) {
+            showRateDialog().show();
+        }
     }
 
     @Override
@@ -248,6 +281,72 @@ public class MainActivity extends AppCompatActivity {
         GoogleAnalytics.getInstance(context).reportActivityStop(this);
         super.onStop();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        super.onDestroy();
+    }
+
+    public Dialog showRateDialog() {
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        WindowManager.LayoutParams WMLP = dialog.getWindow().getAttributes();
+        WMLP.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(WMLP);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.popup_rate);
+        dialog.setCancelable(true);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        final RatingBar ratingBar = (RatingBar) dialog.findViewById(R.id.ratingBar);
+        final FlatButton flatButton = (FlatButton) dialog.findViewById(R.id.button);
+        final boolean[] canGoToPlayStore = {false};
+        final float[] ratingGivenByUser = {0};
+
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                flatButton.setVisibility(View.VISIBLE);
+                editor.putBoolean(AppLockConstants.IS_RATED, true);
+                editor.commit();
+                ratingGivenByUser[0] = rating;
+                if (rating >= 4) {
+                    canGoToPlayStore[0] = true;
+                    flatButton.setText("Show your love on playstore");
+                } else {
+                    canGoToPlayStore[0] = false;
+                    flatButton.setText("Thanks for your rating");
+                }
+                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Rate Given By User", "rate_given_by_user", String.valueOf(rating));
+            }
+        });
+
+        flatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (canGoToPlayStore[0]) {
+                    Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=applock.mindorks.com.applock");
+                    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(goToMarket);
+                    dialog.cancel();
+                    AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Going To Playstore To Rate", "going_to_playstore_to_rate", String.valueOf(ratingGivenByUser[0]));
+                } else {
+                    dialog.cancel();
+                }
+
+            }
+        });
+
+
+        return dialog;
     }
 
 }

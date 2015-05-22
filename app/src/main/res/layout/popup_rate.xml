@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="12dp"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="@string/rate_us"
+        android:textColor="@color/black"
+        android:textSize="28dp" />
+
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:numStars="5"
+        android:rating="0.0"
+        android:stepSize="1.0" />
+
+
+    <applock.mindorks.com.applock.Custom.FlatButton
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:text="Thanks for your rating"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:visibility="gone"
+        app:buttonColor="@color/fbutton_color_midnight_blue"
+        app:cornerRadius="5dp"
+        app:shadowEnabled="true"
+        app:shadowHeight="2dp" />
+
+</LinearLayout>
