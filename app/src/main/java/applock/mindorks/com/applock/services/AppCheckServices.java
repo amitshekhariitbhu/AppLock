@@ -5,12 +5,13 @@ import android.app.Dialog;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -86,12 +87,10 @@ public class AppCheckServices extends Service {
     private TimerTask updateTask = new TimerTask() {
         @Override
         public void run() {
-            Log.d(TAG, "football keep going");
             if (sharedPreference != null) {
                 pakageName = sharedPreference.getLocked(context);
             }
             if (isConcernedAppIsInForeground()) {
-                Log.d(TAG, "football true");
                 if (imageView != null) {
                     imageView.post(new Runnable() {
                         public void run() {
@@ -162,7 +161,6 @@ public class AppCheckServices extends Service {
             }
         });
 
-
         dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
@@ -171,6 +169,23 @@ public class AppCheckServices extends Service {
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.setContentView(promptsView);
         dialog.getWindow().setGravity(Gravity.CENTER);
+
+        dialog.setOnKeyListener(new Dialog.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode,
+                                 KeyEvent event) {
+
+                if (keyCode == KeyEvent.KEYCODE_BACK
+                        && event.getAction() == KeyEvent.ACTION_UP) {
+                    Intent startMain = new Intent(Intent.ACTION_MAIN);
+                    startMain.addCategory(Intent.CATEGORY_HOME);
+                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(startMain);
+                }
+                return true;
+            }
+        });
+
         dialog.show();
 
     }
@@ -192,9 +207,6 @@ public class AppCheckServices extends Service {
     }
 
     public boolean isConcernedAppIsInForeground() {
-        if (pakageName == null) {
-            Log.d(TAG, "football pakage is null");
-        }
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> task = manager.getRunningTasks(5);
         if (Build.VERSION.SDK_INT <= 20) {
