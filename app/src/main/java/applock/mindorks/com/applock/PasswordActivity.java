@@ -44,7 +44,7 @@ public class PasswordActivity extends AppCompatActivity {
             public void onFinish(String password) {
                 if (sharedPreferences.getString(AppLockConstants.PASSWORD, "").matches(password)) {
                     Toast.makeText(getApplicationContext(), "Success : Password Match", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(PasswordActivity.this, MainActivity.class);
+                    Intent i = new Intent(PasswordActivity.this, LoadingActivity.class);
                     startActivity(i);
                     finish();
                     AppLockLogEvents.logEvents(AppLockConstants.PASSWORD_CHECK_SCREEN, "Correct Password", "correct_password", "");

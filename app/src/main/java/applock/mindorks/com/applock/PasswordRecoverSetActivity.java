@@ -89,7 +89,7 @@ public class PasswordRecoverSetActivity extends AppCompatActivity {
                     editor.putInt(AppLockConstants.QUESTION_NUMBER, questionNumber);
                     editor.commit();
 
-                    Intent i = new Intent(PasswordRecoverSetActivity.this, MainActivity.class);
+                    Intent i = new Intent(PasswordRecoverSetActivity.this, LoadingActivity.class);
                     startActivity(i);
                     finish();
                 } else {
