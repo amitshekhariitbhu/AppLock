@@ -3,6 +3,8 @@ package applock.mindorks.com.applock.services;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +12,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,8 +27,10 @@ import com.google.android.gms.analytics.Tracker;
 import com.takwolf.android.lock9.Lock9View;
 
 import java.util.List;
+import java.util.SortedMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import applock.mindorks.com.applock.AppLockApplication;
 import applock.mindorks.com.applock.AppLockConstants;
@@ -221,6 +226,24 @@ public class AppCheckServices extends Service {
             }
         } else {
             String mpackageName = manager.getRunningAppProcesses().get(0).processName;
+            UsageStatsManager usage = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+            long time = System.currentTimeMillis();
+            List<UsageStats> stats = usage.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, 0, time);
+            if (stats != null) {
+                SortedMap<Long, UsageStats> runningTask = new TreeMap<Long, UsageStats>();
+                for (UsageStats usageStats : stats) {
+                    runningTask.put(usageStats.getLastTimeUsed(), usageStats);
+                }
+                if (runningTask.isEmpty()) {
+                    Log.d(TAG,"isEmpty Yes");
+                    mpackageName = "";
+                }else {
+                    mpackageName = runningTask.get(runningTask.lastKey()).getPackageName();
+                    Log.d(TAG,"isEmpty No : "+mpackageName);
+                }
+            }
+
+
             for (int i = 0; pakageName != null && i < pakageName.size(); i++) {
                 if (mpackageName.equals(pakageName.get(i))) {
                     currentApp = pakageName.get(i);

@@ -10,18 +10,20 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -73,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         t.setScreenName(AppLockConstants.MAIN_SCREEN);
         t.send(new HitBuilders.AppViewBuilder().build());
 
+        if (Build.VERSION.SDK_INT > 20){
+            Toast.makeText(getApplicationContext(), "If you have not allowed , allow App Lock so that it can work properly from sliding menu options", Toast.LENGTH_LONG).show();
+        }
+
         fragmentManager = getSupportFragmentManager();
 
         // Handle Toolbar
@@ -88,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName("All Applications").withIcon(FontAwesome.Icon.faw_home),
                         new PrimaryDrawerItem().withName("Locked Applications").withIcon(FontAwesome.Icon.faw_lock),
                         new PrimaryDrawerItem().withName("Unlocked Applications").withIcon(FontAwesome.Icon.faw_unlock),
-                        new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_exchange)
+                        new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_exchange),
+                        new PrimaryDrawerItem().withName("Allow Access").withIcon(FontAwesome.Icon.faw_share)
                 ) // add the items we want to use with our Drawer
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -121,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
                                 Fragment f = PasswordFragment.newInstance();
                                 fragmentManager.beginTransaction().replace(R.id.fragment_container, f).commit();
                                 AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Password Changed Clicked", "password_changed_clicked", "");
+                            }
+
+                            if (position == 4) {
+                                final Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                                startActivity(intent);
+                                Toast.makeText(getApplicationContext(), "If you have not allowed , allow App Lock so that it can work properly", Toast.LENGTH_LONG).show();
+                                AppLockLogEvents.logEvents(AppLockConstants.MAIN_SCREEN, "Allow Access", "allow_access", "");
+                                result.setSelection(0);
                             }
 
                         }
