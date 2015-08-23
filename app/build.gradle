@@ -8,7 +8,7 @@ android {
         applicationId "applock.mindorks.com.applock"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 5
+        versionCode 6
         versionName "1.5"
     }
     buildTypes {
